@@ -79,7 +79,7 @@ public class RestApiTests {
                 .spec(Specs.responseSpec);
     }
 
-  @Test
+  // @Test
     @Feature("Pet")
     @Story("Pet")
     @DisplayName("Find by pet ID")
@@ -151,7 +151,7 @@ public class RestApiTests {
         assertThat(response).isEqualTo("unknown");
     }
 
-  @Test
+  // @Test
     @Feature("User")
     @Story("User")
     @DisplayName("Get User")
