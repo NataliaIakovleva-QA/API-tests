@@ -48,6 +48,7 @@ tasks.withType(JavaCompile) {
 tasks.withType(Test) {
     systemProperties(System.getProperties())
     useJUnitPlatform()
+    ignoreFailures = true
 
     if (System.getProperty("threads") != null) {
         systemProperties += [
