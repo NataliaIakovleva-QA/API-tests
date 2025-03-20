@@ -25,7 +25,6 @@ allure {
 
 dependencies {
     testImplementation(
-            "org.aspectj:aspectjweaver:2.27.0",
             "com.codeborne:selenide:$selenideVersion",
             "io.qameta.allure:allure-selenide:$allureVersion",
             "io.rest-assured:rest-assured:4.3.1",
