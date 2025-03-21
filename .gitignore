@@ -38,6 +38,6 @@ target/
 /gradlew.bat
 .todo
 *.properties
-/design/
+
 
 !/notifications/
