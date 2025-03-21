@@ -1,24 +1,25 @@
 # Проект API-tests
 ## Содержание
-> ➠ [Технологии и инструменты](#Технологии и инструменты)
+> ➠ <a href="#tools">Технологии и инструменты</a>
 >
-> ➠ [Описание проекта](#Описание-проекта)
+> ➠ <a href="#project">Описание проект</a>
 >
-> ➠ [Список проверок](#список-проверок-реализованных-в-автотестах)
+> ➠ <a href="#autotests">Список-проверок-реализованных-в-автотестах</a>
 >
-> ➠ [Пример ручного выполнения тестов с помощью Postman](#Пример-ручного-выполнения-тестов-с-помощью-Postman)
+> ➠ <a href="#postman">Пример-ручного-выполнения-тестов-с-помощью-Postman</a>
 >
-> ➠ [Структура проекта](#Структура-проекта)
+> ➠ <a href="#project_structure">Структура проекта</a>
 >
-> ➠ [Интеграция с Jenkins](#Интеграция с Jenkins)
+> ➠ <a href="#jenkins">Интеграция с Jenkins</a>
 >
-> ➠ [Интеграция с Allure TestOps](#Интеграция с Allure TestOps)
+> ➠ <a href="#allure-testops">Интеграция с Allure TestOps</a>
 >
-> ➠ [Allure отчет](#Allure отчет)
+> ➠ <a href="#allure">Allure отчет</a>
 >
-> ➠ [Оповещения](#Уведомление в Telegram о результатах сборки Jenkins с помощью Telegram-бота)
+> ➠ <a href="#telegram">Уведомление в Telegram при помощи бота</a>
 
-## Используемые технологии
+<a id="tools"></a>
+## <a name="Технологии и инструменты">**Технологии и инструменты:**</a>
 ![This is an image](/design/icons/Java.png)![This is an image](/design/icons/Gradle.png)![This is an image](/design/icons/Rest-Assured.png)![This is an image](/design/icons/Intelij_IDEA.png)![This is an image](/design/icons/JUnit5.png)![This is an image](/design/icons/Jenkins.png)![This is an image](/design/icons/Allure_Report.png)![This is an image](/design/icons/AllureTestOps.png)![This is an image](/design/icons/Telegram.png)
 
 - Язык для написания тестов : [Java](https://www.java.com/ru/)
@@ -31,7 +32,8 @@
 - Реализована интеграция с [Jira Software](https://www.atlassian.com/software/jira)
 - Реализация API тестов при помощи <code>RestAssured</code>
 
-## Описание проекта
+<a id="project"></a>
+## <a name="Описание проекта">**Описание проекта:**</a>
 Дипломный проект реализации автотестирования **Rest Api**.<br/>
 >В качестве объекта тестирования выбран сайт https://petstore.swagger.io/ с открытым api.<br/>
 
@@ -45,7 +47,8 @@
 - Использованы шаблоны форматирования логов запросов.
 - Использованы кастомные шаблоны запросов и ответов
 
-## Примеры автоматизированных тест-кейсов
+<a id="autotests"></a>
+## <a name="Список-проверок-реализованных-в-автотестах">**Список-проверок-реализованных-в-автотестах:**</a>
 - [x] Find by status Available. Поиск по статусу Available.
 - [x] Find by status Pending. Поиск по статусу Pending.
 - [x] Find by status Sold. Поиск по статусу Sold.
@@ -60,10 +63,12 @@
 - [x] Find Order. Поиск заказа.
 
 
-## Пример ручного выполнения тестов с помощью Postman
+<a id="postman"></a>
+## <a name="Пример-ручного-выполнения-тестов-с-помощью-Postman">**Пример-ручного-выполнения-тестов-с-помощью-Postman:**</a>
 ![This is an image](/design/images/postman.png)
 
-## Структура проекта
+<a id="project_structure"></a>
+## <a name="Структура проекта">**Структура проекта:**</a>
 - [x] data - генерирование тестовых данных
 - [x] helpers - подключение кастомных шаблонов для Allure Report
 - [x] models - модели данных для тестов
@@ -73,7 +78,8 @@
 ![This is an image](/design/images/project.png)
 
 
-## Интеграция с Jenkins
+<a id="jenkins"></a>
+## <a name="Интеграция с Jenkins">**Интеграция с Jenkins:**</a>
 > <a target="_blank" href="https://jenkins.autotests.cloud/job/API-tests/">Ссылка на проект в Jenkins</a>
 
 ![This is an image](/design/images/jenkins_api.png)
@@ -95,7 +101,8 @@ gradle clean test
 clean ${TASK}
 ```
 
-## Интеграция с Allure TestOps
+<a id="tools"></a>
+## <a name="Интеграция с Allure TestOps">**Интеграция с Allure TestOps:**</a>
 > <a target="_blank" href="https://allure.autotests.cloud/project/4671/dashboards">Сссылка на проект в AllureTestOps</a> (запрос доступа admin@qa.guru)
 
 ### Итоговые dashboard по результатам сборок
@@ -106,7 +113,9 @@ clean ${TASK}
 ![This is an image](/design/images/launches.png)
 
 <a id="allure"></a>
-## <a name="Allure"></a>Allure [отчет](https://jenkins.autotests.cloud/job/API-tests/20/allure/)</a>
+## <a name="Allure отчет">**Allure отчет:**</a>
+> <a target="_blank" href="https://jenkins.autotests.cloud/job/API-tests/20/allure/">Сссылка на Allure-отчет</a>
+
 
 ### Итоговые dashboard в Allure Report
 ![This is an image](/design/images/allure_report_dashboard.png)
@@ -117,6 +126,7 @@ clean ${TASK}
 ### Графики Dashboards в Allure Report
 ![This is an image](/design/images/graph2.png)
 
-## Уведомление в Telegram о результатах сборки Jenkins с помощью Telegram-бота
+<a id="telegram"></a>
+## <a name="Уведомление в Telegram при помощи бота">**Уведомление в Telegram при помощи бота:**</a>
 ![This is an image](/design/images/bot.png)
 
