@@ -38,7 +38,6 @@ target/
 /gradlew.bat
 .todo
 *.properties
-/README.md
 /design/
 
 !/notifications/
