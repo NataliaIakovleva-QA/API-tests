@@ -1,10 +1,10 @@
 package ru.iakovleva.api;
 
-import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ru.iakovleva.api.data.DataGenerator;
 import ru.iakovleva.api.models.Order;
@@ -21,8 +21,9 @@ import static org.hamcrest.Matchers.hasSize;
 public class RestApiTests {
 
     @Test
-    @Feature("Pet")
-    @Story("Pet")
+    @Tag("Pet")
+    @Tag("positive")
+    @Tag("low")
     @DisplayName("Find by status Available")
     @Severity(SeverityLevel.NORMAL)
     void findByStatusAvailableTest() {
@@ -36,8 +37,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("Pet")
-    @Story("Pet")
+    @Tag("Pet")
+    @Tag("positive")
+    @Tag("smoke")
     @DisplayName("Find by status Pending")
     @Severity(SeverityLevel.NORMAL)
     void findByStatusPendingTest() {
@@ -51,8 +53,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("Pet")
-    @Story("Pet")
+    @Tag("Pet")
+    @Tag("positive")
+    @Tag("smoke")
     @DisplayName("Find by status Sold")
     @Severity(SeverityLevel.NORMAL)
     void findByStatusSoldTest() {
@@ -66,8 +69,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("Pet")
-    @Story("Pet")
+    @Tag("Pet")
+    @Tag("negative")
+    @Tag("low")
     @DisplayName("Find by status Null")
     @Severity(SeverityLevel.NORMAL)
     void findByStatusNullTest() {
@@ -79,24 +83,30 @@ public class RestApiTests {
                 .spec(Specs.responseSpec);
     }
 
-  // @Test
-    @Feature("Pet")
-    @Story("Pet")
-    @DisplayName("Find by pet ID")
-    @Severity(SeverityLevel.NORMAL)
-    void petIdTest() {
-        given(Specs.request)
+    @Test
+    @Tag("Pet")
+    @Tag("positive")
+    @Tag("smoke")
+    @DisplayName("Create pet")
+    @Severity(SeverityLevel.BLOCKER)
+    void createPetTest() {
+        Pet newPet = DataGenerator.getPet(8, 16, true, true, true);
+
+        Integer response = given(Specs.request)
+                .body(newPet)
                 .when()
-                .get("/v2/pet/9223372016854934000")
+                .post("/v2/pet")
                 .then()
                 .spec(Specs.responseSpec)
-                .body("id", is(9223372016854934000L))
-                .body("name", is("doggie"));
+                .extract().path("id");
+
+        assertThat(response).isEqualTo(newPet.getId());
     }
 
     @Test
-    @Feature("User")
-    @Story("User")
+    @Tag("User")
+    @Tag("positive")
+    @Tag("smoke")
     @DisplayName("Create User")
     @Severity(SeverityLevel.BLOCKER)
     void createUserTest() {
@@ -114,8 +124,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("User")
-    @Story("User")
+    @Tag("User")
+    @Tag("negative")
+    @Tag("low")
     @DisplayName("Create User with array")
     @Severity(SeverityLevel.BLOCKER)
     void createWithArrayTest() {
@@ -133,8 +144,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("User")
-    @Story("User")
+    @Tag("User")
+    @Tag("negative")
+    @Tag("low")
     @DisplayName("Create User with list")
     @Severity(SeverityLevel.BLOCKER)
     void createWithListTest() {
@@ -151,23 +163,11 @@ public class RestApiTests {
         assertThat(response).isEqualTo("unknown");
     }
 
-  // @Test
-    @Feature("User")
-    @Story("User")
-    @DisplayName("Get User")
-    @Severity(SeverityLevel.CRITICAL)
-    void getUserTest() {
-        given(Specs.request)
-                .when()
-                .get("v2/user/user564564654")
-                .then()
-                .spec(Specs.responseSpec)
-                .body("id", is(4984564564654L));
-    }
 
     @Test
-    @Feature("User")
-    @Story("User")
+    @Tag("User")
+    @Tag("negative")
+    @Tag("smoke")
     @DisplayName("Get empty User")
     @Severity(SeverityLevel.TRIVIAL)
     void getEmptyUserTest() {
@@ -180,8 +180,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("User")
-    @Story("User")
+    @Tag("User")
+    @Tag("negative")
+    @Tag("smoke")
     @DisplayName("Get null User")
     @Severity(SeverityLevel.TRIVIAL)
     void getNullUserTest() {
@@ -193,8 +194,9 @@ public class RestApiTests {
     }
 
     @Test
-    @Feature("Order")
-    @Story("Order")
+    @Tag("Order")
+    @Tag("positive")
+    @Tag("smoke")
     @DisplayName("Create Order")
     @Severity(SeverityLevel.NORMAL)
     void createOrderTest() {
@@ -213,7 +215,7 @@ public class RestApiTests {
 
 
     @Test
-    @Feature("Order")
+    @Tag("Order")
     @Story("Order")
     @DisplayName("Find order")
     @Severity(SeverityLevel.CRITICAL)
@@ -224,25 +226,6 @@ public class RestApiTests {
                 .then()
                 .statusCode(404)
                 .body("message", is("Order not found"));
-    }
-
-    @Test
-    @Feature("Pet")
-    @Story("Pet")
-    @DisplayName("Create pet")
-    @Severity(SeverityLevel.BLOCKER)
-    void createPetTest() {
-        Pet newPet = DataGenerator.getPet(8, 16, true, true, true);
-
-        Integer response = given(Specs.request)
-                .body(newPet)
-                .when()
-                .post("/v2/pet")
-                .then()
-                .spec(Specs.responseSpec)
-                .extract().path("id");
-
-        assertThat(response).isEqualTo(newPet.getId());
     }
 
 }
