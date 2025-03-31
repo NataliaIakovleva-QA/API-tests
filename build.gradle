@@ -34,13 +34,11 @@ dependencies {
             "io.rest-assured:rest-assured:4.3.1",
             "io.qameta.allure:allure-rest-assured:$allureVersion",
             "com.fasterxml.jackson.core:jackson-databind:2.11.2",
-            "org.aeonbits.owner:owner:1.0.12",
             "org.assertj:assertj-core:3.22.0",
             "com.github.javafaker:javafaker:$javaFakerVersion",
-            "org.junit.jupiter:junit-jupiter-api:$junitVersion")
+            "org.junit.jupiter:junit-jupiter:$junitVersion")
     testRuntimeOnly(
-            "org.slf4j:slf4j-simple:1.7.29",
-            "org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+            "org.slf4j:slf4j-simple:1.7.29")
 }
 
 tasks.withType(JavaCompile) {
@@ -54,16 +52,6 @@ tasks.withType(Test) {
     useJUnitPlatform()
     ignoreFailures = true
 
-    if (System.getProperty("threads") != null) {
-        systemProperties += [
-                'junit.jupiter.execution.parallel.enabled'                 : true,
-                'junit.jupiter.execution.parallel.mode.default'            : 'concurrent',
-                'junit.jupiter.execution.parallel.mode.classes.default'    : 'concurrent',
-                'junit.jupiter.execution.parallel.config.strategy'         : 'fixed',
-                'junit.jupiter.execution.parallel.config.fixed.parallelism': System.getProperty("threads").toInteger()
-        ]
-    }
-
     testLogging {
         lifecycle {
             events "started", "skipped", "failed", "standard_error", "standard_out"
@@ -72,43 +60,43 @@ tasks.withType(Test) {
     }
 }
 
-task Pet (type: Test) {
+task Pet(type: Test) {
     useJUnitPlatform {
         includeTags("Pet")
     }
 }
 
-task User (type: Test) {
+task User(type: Test) {
     useJUnitPlatform {
         includeTags("User")
     }
 }
 
-task Order (type: Test) {
+task Order(type: Test) {
     useJUnitPlatform {
         includeTags("Order")
     }
 }
 
-task smoke (type: Test) {
+task smoke(type: Test) {
     useJUnitPlatform {
         includeTags("smoke")
     }
 }
 
-task low (type: Test) {
+task low(type: Test) {
     useJUnitPlatform {
         includeTags("low")
     }
 }
 
-task positive (type: Test) {
+task positive(type: Test) {
     useJUnitPlatform {
         includeTags("positive")
     }
 }
 
-task negative (type: Test) {
+task negative(type: Test) {
     useJUnitPlatform {
         includeTags("negative")
     }

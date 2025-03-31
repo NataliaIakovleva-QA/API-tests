@@ -7,23 +7,22 @@ import ru.iakovleva.api.models.Order;
 
 public class DataGenerator {
     public static User getUser(int minimumLength, int maximumLength, boolean includeUppercase,
-                                  boolean includeSpecial, boolean includeDigit) {
+                               boolean includeSpecial, boolean includeDigit) {
         Faker faker = new Faker();
         return User.builder()
                 .id(faker.hashCode())
-                .userName(faker.name().username())
+                .username(faker.name().username().replaceAll("[^a-z]", ""))
                 .firstName(faker.name().username())
                 .lastName(faker.name().username())
                 .email(faker.internet().emailAddress())
                 .password(faker.internet().password(minimumLength, maximumLength, includeUppercase,
                         includeSpecial, includeDigit))
                 .phone(faker.phoneNumber().phoneNumber())
-                .userStatus(faker.hashCode())
+                .userStatus(1)
                 .build();
     }
 
-    public static Order getOrder(int minimumLength, int maximumLength, boolean includeUppercase,
-                                    boolean includeSpecial, boolean includeDigit) {
+    public static Order getOrder() {
         Faker faker = new Faker();
         return Order.builder()
                 .id(faker.hashCode())
@@ -35,8 +34,7 @@ public class DataGenerator {
                 .build();
     }
 
-    public static Pet getPet(int minimumLength, int maximumLength, boolean includeUppercase,
-                                boolean includeSpecial, boolean includeDigit) {
+    public static Pet getPet() {
         Faker faker = new Faker();
         return Pet.builder()
                 .id(faker.hashCode())

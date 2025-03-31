@@ -16,7 +16,11 @@ public class Specs {
             .log().all()
             .contentType(ContentType.JSON);
 
-    public static ResponseSpecification responseSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification OK = new ResponseSpecBuilder()
             .expectStatusCode(200)
+            .build();
+
+    public static ResponseSpecification NOT_FOUND = new ResponseSpecBuilder()
+            .expectStatusCode(404)
             .build();
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private Integer id;
-    private String userName;
+    private String username;
     private String firstName;
     private String lastName;
     private String email;
@@ -17,10 +17,21 @@ public class User {
     private String phone;
     private Integer userStatus;
 
+    public User() {}
+    public User(Integer id, String username, String firstName, String lastName, String email, String password, String phone, Integer userStatus) {
+        this.id = id;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.userStatus = userStatus;
+    }
 
     @Override
     public String toString() {
-        return "{ \"id\": \"" + id + "\", \"username\": \"" + userName + "\", \"firstName\": \"" + firstName + "\", " +
+        return "{ \"id\": \"" + id + "\", \"username\": \"" + username + "\", \"firstName\": \"" + firstName + "\", " +
                 "\"lastName\": \"" + lastName + "\", \"email\": \"" + email + "\", \"password\": \"" + password + "\"," +
                 " \"phone\": \"" + phone + "\", \"userStatus\": \"" + userStatus + "\" }";
     }
