@@ -12,31 +12,20 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ru.iakovleva.api.data.DataGenerator;
 import ru.iakovleva.api.models.Order;
 import ru.iakovleva.api.models.Pet;
+import ru.iakovleva.api.models.PetStatus;
 import ru.iakovleva.api.models.User;
 import ru.iakovleva.api.spec.Specs;
+import ru.iakovleva.api.steps.PetSteps;
+import ru.iakovleva.api.steps.UserSteps;
+import ru.iakovleva.api.steps.OrderSteps;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
+import static io.restassured.RestAssured.given;
 
 public class RestApiTests {
-
-    public enum PetStatus {
-        AVAILABLE("available", false),
-        PENDING("pending", false),
-        SOLD("sold", false),
-        NULL("null", true);
-
-        final String code;
-        final boolean expectedZeroResult;
-
-        PetStatus(String code, boolean expectedZeroResult) {
-            this.code = code;
-            this.expectedZeroResult = expectedZeroResult;
-        }
-    }
 
     @ParameterizedTest(name = "Find by status {0}")
     @EnumSource(PetStatus.class)
@@ -45,14 +34,10 @@ public class RestApiTests {
     @Tag("low")
     @Severity(SeverityLevel.NORMAL)
     void findByStatus(PetStatus status) {
-        ValidatableResponse resp = given(Specs.request)
-                .when()
-                .params("status", status.code)
-                .get("/v2/pet/findByStatus")
-                .then()
-                .spec(Specs.OK);
-        if (!status.expectedZeroResult)
+        ValidatableResponse resp = PetSteps.findByStatus(status);
+        if (!status.isExpectedZeroResult()) {  // Теперь этот метод существует
             resp.body("id", hasSize(greaterThan(0)));
+        }
     }
 
     @Test
@@ -63,15 +48,7 @@ public class RestApiTests {
     @Severity(SeverityLevel.BLOCKER)
     void createPetTest() {
         Pet newPet = DataGenerator.getPet();
-
-        Integer response = given(Specs.request)
-                .body(newPet)
-                .when()
-                .post("/v2/pet")
-                .then()
-                .spec(Specs.OK)
-                .extract().path("id");
-
+        Integer response = PetSteps.createPet(newPet);
         assertThat(response).isEqualTo(newPet.getId());
     }
 
@@ -83,15 +60,7 @@ public class RestApiTests {
     @Severity(SeverityLevel.BLOCKER)
     void createUserTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-
-        String response = given(Specs.request)
-                .body(newUser)
-                .when()
-                .post("/v2/user")
-                .then()
-                .spec(Specs.OK)
-                .extract().path("message");
-
+        String response = UserSteps.createUser(newUser);
         assertThat(response).isEqualTo(newUser.getId().toString());
     }
 
@@ -101,55 +70,28 @@ public class RestApiTests {
     @Tag("smoke")
     @DisplayName("Create, update and delete user")
     @Severity(SeverityLevel.BLOCKER)
-    void crudUserTest() throws Exception {
+    void crudUserTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
 
-        // create user
-        String response = given(Specs.request)
-                .body(newUser)
-                .when()
-                .post("/v2/user")
-                .then()
-                .spec(Specs.OK)
-                .extract().path("message");
+        // Create
+        String response = UserSteps.createUser(newUser);
         assertThat(response).isEqualTo(newUser.getId().toString());
 
+        // Update
         newUser.setFirstName("Vasya");
         newUser.setLastName("is here");
+        UserSteps.updateUser(newUser);
 
-        // update first/last names
-        given(Specs.request)
-                .body(newUser)
-                .when()
-                .put("/v2/user/" + newUser.getUsername())
-                .then()
-                .spec(Specs.OK);
-
-        // checking first/last names
-        User loadedUser = given(Specs.request)
-                .when()
-                .get("/v2/user/" + newUser.getUsername())
-                .then()
-                .spec(Specs.OK)
-                .extract().as(User.class);
+        // Check
+        User loadedUser = UserSteps.getUser(newUser.getUsername());
         assertThat(loadedUser).isNotNull();
         assertThat(loadedUser.getId()).isEqualTo(newUser.getId());
         assertThat(loadedUser.getFirstName()).isEqualTo(newUser.getFirstName());
         assertThat(loadedUser.getLastName()).isEqualTo(newUser.getLastName());
 
-        // delete user
-        given(Specs.request)
-                .when()
-                .delete("/v2/user/" + newUser.getUsername())
-                .then()
-                .spec(Specs.OK);
-
-        // verifying not found by GET
-        given(Specs.request)
-                .when()
-                .get("/v2/user/" + newUser.getUsername())
-                .then()
-                .spec(Specs.NOT_FOUND);
+        // Delete
+        UserSteps.deleteUser(newUser.getUsername());
+        UserSteps.getUserNotFound(newUser.getUsername());
     }
 
     @Test
@@ -160,7 +102,6 @@ public class RestApiTests {
     @Severity(SeverityLevel.BLOCKER)
     void createWithArrayTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-
         String response = given(Specs.request)
                 .body(newUser)
                 .when()
@@ -168,7 +109,6 @@ public class RestApiTests {
                 .then()
                 .statusCode(500)
                 .extract().path("message");
-
         assertThat(response).isEqualTo("something bad happened");
     }
 
@@ -180,7 +120,6 @@ public class RestApiTests {
     @Severity(SeverityLevel.BLOCKER)
     void createWithListTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-
         String response = given(Specs.request)
                 .body(newUser)
                 .when()
@@ -188,10 +127,8 @@ public class RestApiTests {
                 .then()
                 .statusCode(500)
                 .extract().path("type");
-
         assertThat(response).isEqualTo("unknown");
     }
-
 
     @Test
     @Tag("User")
@@ -230,18 +167,9 @@ public class RestApiTests {
     @Severity(SeverityLevel.NORMAL)
     void createOrderTest() {
         Order newOrder = DataGenerator.getOrder();
-
-        Integer response = given(Specs.request)
-                .body(newOrder)
-                .when()
-                .post("/v2/store/order")
-                .then()
-                .spec(Specs.OK)
-                .extract().path("id");
-
+        Integer response = OrderSteps.createOrder(newOrder);
         assertThat(response).isEqualTo(newOrder.getId());
     }
-
 
     @Test
     @Tag("Order")
@@ -249,12 +177,7 @@ public class RestApiTests {
     @DisplayName("Find order")
     @Severity(SeverityLevel.CRITICAL)
     void findOrderTest() {
-        given(Specs.request)
-                .when()
-                .get("/v2/store/order/2222")
-                .then()
-                .statusCode(404)
+        OrderSteps.findOrder(2222)
                 .body("message", is("Order not found"));
     }
-
 }
