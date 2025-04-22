@@ -103,7 +103,7 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createWithArrayTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-        String response = given(Specs.request)
+        String response = given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(newUser)
                 .when()
                 .post("/user/createWithArray")
@@ -121,7 +121,7 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createWithListTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-        String response = given(Specs.request)
+        String response = given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(newUser)
                 .when()
                 .post("/user/createWithList")
@@ -138,7 +138,7 @@ public class RestApiTests extends TestBase {
     @DisplayName("Get empty User")
     @Severity(SeverityLevel.TRIVIAL)
     void getEmptyUserTest() {
-        given(Specs.request)
+        given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/user/user55")
                 .then()
@@ -153,7 +153,7 @@ public class RestApiTests extends TestBase {
     @DisplayName("Get null User")
     @Severity(SeverityLevel.TRIVIAL)
     void getNullUserTest() {
-        given(Specs.request)
+        given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/user/")
                 .then()

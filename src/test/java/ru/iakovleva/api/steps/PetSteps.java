@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 
 public class PetSteps {
     public static ValidatableResponse findByStatus(PetStatus status) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .params("status", status.getCode())
                 .get("/pet/findByStatus")
@@ -18,7 +18,7 @@ public class PetSteps {
     }
 
     public static Integer createPet(Pet pet) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(pet)
                 .when()
                 .post("/pet")

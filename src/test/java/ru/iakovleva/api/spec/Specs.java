@@ -10,7 +10,7 @@ import static ru.iakovleva.api.helpers.CustomAllureListener.withCustomTemplates;
 
 public class Specs {
 
-    public static RequestSpecification request = with()
+    public static final RequestSpecification PETSTORE_REQUEST_SPEC = with()
             .filter(withCustomTemplates())
             .contentType(ContentType.JSON)
             .log().all();

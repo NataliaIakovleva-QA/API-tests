@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 
 public class OrderSteps {
     public static Integer createOrder(Order order) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(order)
                 .when()
                 .post("/store/order")
@@ -18,7 +18,7 @@ public class OrderSteps {
     }
 
     public static ValidatableResponse findOrder(int orderId) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/store/order/" + orderId)
                 .then()
@@ -26,7 +26,7 @@ public class OrderSteps {
     }
 
     public static ValidatableResponse findOrderSuccess(int orderId) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/store/order/" + orderId)
                 .then()

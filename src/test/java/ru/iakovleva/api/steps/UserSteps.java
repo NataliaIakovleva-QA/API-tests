@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 
 public class UserSteps {
     public static String createUser(User user) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(user)
                 .when()
                 .post("/user")
@@ -18,7 +18,7 @@ public class UserSteps {
     }
 
     public static void updateUser(User user) {
-        given(Specs.request)
+        given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(user)
                 .when()
                 .put("/user/" + user.getUsername())
@@ -27,7 +27,7 @@ public class UserSteps {
     }
 
     public static User getUser(String username) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/user/" + username)
                 .then()
@@ -36,7 +36,7 @@ public class UserSteps {
     }
 
     public static void deleteUser(String username) {
-        given(Specs.request)
+        given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .delete("/user/" + username)
                 .then()
@@ -44,7 +44,7 @@ public class UserSteps {
     }
 
     public static ValidatableResponse getUserNotFound(String username) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .when()
                 .get("/user/" + username)
                 .then()
@@ -52,7 +52,7 @@ public class UserSteps {
     }
 
     public static ValidatableResponse createWithArray(User[] users) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(users)
                 .when()
                 .post("/user/createWithArray")
@@ -61,7 +61,7 @@ public class UserSteps {
     }
 
     public static ValidatableResponse createWithList(User[] users) {
-        return given(Specs.request)
+        return given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(users)
                 .when()
                 .post("/user/createWithList")
