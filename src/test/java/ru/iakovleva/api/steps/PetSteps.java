@@ -12,7 +12,7 @@ public class PetSteps {
         return given(Specs.request)
                 .when()
                 .params("status", status.getCode())
-                .get("/v2/pet/findByStatus")
+                .get("/pet/findByStatus")
                 .then()
                 .spec(Specs.OK);
     }
@@ -21,7 +21,7 @@ public class PetSteps {
         return given(Specs.request)
                 .body(pet)
                 .when()
-                .post("/v2/pet")
+                .post("/pet")
                 .then()
                 .spec(Specs.OK)
                 .extract().path("id");

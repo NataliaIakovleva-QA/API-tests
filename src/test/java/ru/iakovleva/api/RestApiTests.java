@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import ru.iakovleva.api.config.TestBase;
+import static io.restassured.RestAssured.given;
 import ru.iakovleva.api.data.DataGenerator;
 import ru.iakovleva.api.models.Order;
 import ru.iakovleva.api.models.Pet;
@@ -23,9 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-import static io.restassured.RestAssured.given;
 
-public class RestApiTests {
+public class RestApiTests extends TestBase {
 
     @ParameterizedTest(name = "Find by status {0}")
     @EnumSource(PetStatus.class)
@@ -35,7 +36,7 @@ public class RestApiTests {
     @Severity(SeverityLevel.NORMAL)
     void findByStatus(PetStatus status) {
         ValidatableResponse resp = PetSteps.findByStatus(status);
-        if (!status.isExpectedZeroResult()) {  // Теперь этот метод существует
+        if (!status.isExpectedZeroResult()) {
             resp.body("id", hasSize(greaterThan(0)));
         }
     }
@@ -105,9 +106,9 @@ public class RestApiTests {
         String response = given(Specs.request)
                 .body(newUser)
                 .when()
-                .post("/v2/user/createWithArray")
+                .post("/user/createWithArray")
                 .then()
-                .statusCode(500)
+                .spec(Specs.responseSpec(500))
                 .extract().path("message");
         assertThat(response).isEqualTo("something bad happened");
     }
@@ -123,9 +124,9 @@ public class RestApiTests {
         String response = given(Specs.request)
                 .body(newUser)
                 .when()
-                .post("/v2/user/createWithList")
+                .post("/user/createWithList")
                 .then()
-                .statusCode(500)
+                .spec(Specs.responseSpec(500))
                 .extract().path("type");
         assertThat(response).isEqualTo("unknown");
     }
@@ -139,9 +140,9 @@ public class RestApiTests {
     void getEmptyUserTest() {
         given(Specs.request)
                 .when()
-                .get("v2/user/user55")
+                .get("/user/user55")
                 .then()
-                .statusCode(404)
+                .spec(Specs.NOT_FOUND)
                 .body("message", is("User not found"));
     }
 
@@ -154,9 +155,9 @@ public class RestApiTests {
     void getNullUserTest() {
         given(Specs.request)
                 .when()
-                .get("v2/user/")
+                .get("/user/")
                 .then()
-                .statusCode(405);
+                .spec(Specs.responseSpec(405));
     }
 
     @Test
@@ -167,8 +168,8 @@ public class RestApiTests {
     @Severity(SeverityLevel.NORMAL)
     void createOrderTest() {
         Order newOrder = DataGenerator.getOrder();
-        Integer response = OrderSteps.createOrder(newOrder);
-        assertThat(response).isEqualTo(newOrder.getId());
+        Integer newOrderId = OrderSteps.createOrder(newOrder);
+        assertThat(newOrderId).isEqualTo(newOrder.getId());
     }
 
     @Test
@@ -177,7 +178,8 @@ public class RestApiTests {
     @DisplayName("Find order")
     @Severity(SeverityLevel.CRITICAL)
     void findOrderTest() {
-        OrderSteps.findOrder(2222)
+        OrderSteps.findOrder(22222)
+                .spec(Specs.NOT_FOUND)
                 .body("message", is("Order not found"));
     }
 }

@@ -11,7 +11,7 @@ public class OrderSteps {
         return given(Specs.request)
                 .body(order)
                 .when()
-                .post("/v2/store/order")
+                .post("/store/order")
                 .then()
                 .spec(Specs.OK)
                 .extract().path("id");
@@ -20,8 +20,16 @@ public class OrderSteps {
     public static ValidatableResponse findOrder(int orderId) {
         return given(Specs.request)
                 .when()
-                .get("/v2/store/order/" + orderId)
+                .get("/store/order/" + orderId)
                 .then()
                 .spec(Specs.NOT_FOUND);
+    }
+
+    public static ValidatableResponse findOrderSuccess(int orderId) {
+        return given(Specs.request)
+                .when()
+                .get("/store/order/" + orderId)
+                .then()
+                .spec(Specs.OK);
     }
 }

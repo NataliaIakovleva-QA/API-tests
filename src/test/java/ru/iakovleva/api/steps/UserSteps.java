@@ -11,7 +11,7 @@ public class UserSteps {
         return given(Specs.request)
                 .body(user)
                 .when()
-                .post("/v2/user")
+                .post("/user")
                 .then()
                 .spec(Specs.OK)
                 .extract().path("message");
@@ -21,7 +21,7 @@ public class UserSteps {
         given(Specs.request)
                 .body(user)
                 .when()
-                .put("/v2/user/" + user.getUsername())
+                .put("/user/" + user.getUsername())
                 .then()
                 .spec(Specs.OK);
     }
@@ -29,7 +29,7 @@ public class UserSteps {
     public static User getUser(String username) {
         return given(Specs.request)
                 .when()
-                .get("/v2/user/" + username)
+                .get("/user/" + username)
                 .then()
                 .spec(Specs.OK)
                 .extract().as(User.class);
@@ -38,7 +38,7 @@ public class UserSteps {
     public static void deleteUser(String username) {
         given(Specs.request)
                 .when()
-                .delete("/v2/user/" + username)
+                .delete("/user/" + username)
                 .then()
                 .spec(Specs.OK);
     }
@@ -46,8 +46,26 @@ public class UserSteps {
     public static ValidatableResponse getUserNotFound(String username) {
         return given(Specs.request)
                 .when()
-                .get("/v2/user/" + username)
+                .get("/user/" + username)
                 .then()
                 .spec(Specs.NOT_FOUND);
+    }
+
+    public static ValidatableResponse createWithArray(User[] users) {
+        return given(Specs.request)
+                .body(users)
+                .when()
+                .post("/user/createWithArray")
+                .then()
+                .spec(Specs.responseSpec(500));
+    }
+
+    public static ValidatableResponse createWithList(User[] users) {
+        return given(Specs.request)
+                .body(users)
+                .when()
+                .post("/user/createWithList")
+                .then()
+                .spec(Specs.responseSpec(500));
     }
 }
