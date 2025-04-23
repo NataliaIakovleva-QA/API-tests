@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import ru.iakovleva.api.config.TestBase;
 import static io.restassured.RestAssured.given;
 import ru.iakovleva.api.data.DataGenerator;
 import ru.iakovleva.api.models.Order;

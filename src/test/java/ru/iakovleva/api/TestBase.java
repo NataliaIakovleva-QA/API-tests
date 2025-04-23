@@ -1,4 +1,4 @@
-package ru.iakovleva.api.config;
+package ru.iakovleva.api;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
