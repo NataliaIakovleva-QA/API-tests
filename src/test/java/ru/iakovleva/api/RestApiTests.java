@@ -4,6 +4,7 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.ValidatableResponse;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,8 +49,8 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createPetTest() {
         Pet newPet = DataGenerator.getPet();
-        Integer response = PetSteps.createPet(newPet);
-        assertThat(response).isEqualTo(newPet.getId());
+        Integer newPetId_fromResponse = PetSteps.createPet(newPet);
+        assertThat(newPetId_fromResponse).isEqualTo(newPet.getId());
     }
 
     @Test
@@ -60,8 +61,8 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createUserTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-        String response = UserSteps.createUser(newUser);
-        assertThat(response).isEqualTo(newUser.getId().toString());
+        String newUserId_fromResponse = UserSteps.createUser(newUser);
+        assertThat(newUserId_fromResponse).isEqualTo(newUser.getId().toString());
     }
 
     @Test
@@ -74,8 +75,8 @@ public class RestApiTests extends TestBase {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
 
         // Create
-        String response = UserSteps.createUser(newUser);
-        assertThat(response).isEqualTo(newUser.getId().toString());
+        String newUserId_fromResponse = UserSteps.createUser(newUser);
+        assertThat(newUserId_fromResponse).isEqualTo(newUser.getId().toString());
 
         // Update
         newUser.setFirstName("Vasya");
@@ -85,9 +86,11 @@ public class RestApiTests extends TestBase {
         // Check
         User loadedUser = UserSteps.getUser(newUser.getUsername());
         assertThat(loadedUser).isNotNull();
-        assertThat(loadedUser.getId()).isEqualTo(newUser.getId());
-        assertThat(loadedUser.getFirstName()).isEqualTo(newUser.getFirstName());
-        assertThat(loadedUser.getLastName()).isEqualTo(newUser.getLastName());
+        SoftAssertions.assertSoftly(s -> {
+            assertThat(loadedUser.getId()).isEqualTo(newUser.getId());
+            assertThat(loadedUser.getFirstName()).isEqualTo(newUser.getFirstName());
+            assertThat(loadedUser.getLastName()).isEqualTo(newUser.getLastName());
+        });
 
         // Delete
         UserSteps.deleteUser(newUser.getUsername());
@@ -102,14 +105,14 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createWithArrayTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-        String response = given(Specs.PETSTORE_REQUEST_SPEC)
+        String message_fromResponse = given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(newUser)
                 .when()
                 .post("/user/createWithArray")
                 .then()
                 .spec(Specs.responseSpec(500))
                 .extract().path("message");
-        assertThat(response).isEqualTo("something bad happened");
+        assertThat(message_fromResponse).isEqualTo("something bad happened");
     }
 
     @Test
@@ -120,14 +123,14 @@ public class RestApiTests extends TestBase {
     @Severity(SeverityLevel.BLOCKER)
     void createWithListTest() {
         User newUser = DataGenerator.getUser(8, 16, true, true, true);
-        String response = given(Specs.PETSTORE_REQUEST_SPEC)
+        String type_fromResp = given(Specs.PETSTORE_REQUEST_SPEC)
                 .body(newUser)
                 .when()
                 .post("/user/createWithList")
                 .then()
                 .spec(Specs.responseSpec(500))
                 .extract().path("type");
-        assertThat(response).isEqualTo("unknown");
+        assertThat(type_fromResp).isEqualTo("unknown");
     }
 
     @Test
